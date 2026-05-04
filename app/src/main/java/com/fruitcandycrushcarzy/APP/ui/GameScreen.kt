@@ -25,6 +25,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.fruitcandycrushcarzy.APP.R
 import com.fruitcandycrushcarzy.APP.game.model.Position
 import com.fruitcandycrushcarzy.APP.game.viewmodel.GameViewModel
+import com.fruitcandycrushcarzy.APP.ui.components.AdBanner
 import com.fruitcandycrushcarzy.APP.ui.components.FruitCell
 import kotlinx.coroutines.delay
 
@@ -288,6 +289,8 @@ fun GameScreen(viewModel: GameViewModel = viewModel()) {
             }
             
             Spacer(modifier = Modifier.height(40.dp))
+            
+            AdBanner(modifier = Modifier.padding(bottom = 8.dp))
         }
 
         // Overlay Management

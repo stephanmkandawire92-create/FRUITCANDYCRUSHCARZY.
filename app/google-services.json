@@ -1,0 +1,76 @@
+{
+  "project_info": {
+    "project_number": "99703379764",
+    "project_id": "allan-project-6f41e",
+    "storage_bucket": "allan-project-6f41e.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:99703379764:android:c88e20c669592d2864f761",
+        "android_client_info": {
+          "package_name": "com.christianconnect.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "99703379764-tgcsvk33d961cbg9mhef1uj6gpb7baf7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.christianconnect.app",
+            "certificate_hash": "d62a6ec915040a6b62db0090fb3c69b3d70e071a"
+          }
+        },
+        {
+          "client_id": "99703379764-eovv2j3lf8nrkknr24en7un241hc7cj1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCZh4J5C_VlGETHPjivAJz0nIuRnCtw9dw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "99703379764-eovv2j3lf8nrkknr24en7un241hc7cj1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:99703379764:android:8048ba6c8176f62264f761",
+        "android_client_info": {
+          "package_name": "com.fruitcandycrushcarzy.APP"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "99703379764-eovv2j3lf8nrkknr24en7un241hc7cj1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCZh4J5C_VlGETHPjivAJz0nIuRnCtw9dw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "99703379764-eovv2j3lf8nrkknr24en7un241hc7cj1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
