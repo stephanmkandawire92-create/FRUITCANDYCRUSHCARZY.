@@ -21,7 +21,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 enum class GameEvent {
-    MATCH, SWAP, GAME_OVER, LEVEL_UP, SPECIAL_EXPLOSION
+    MATCH, SWAP, GAME_OVER, LEVEL_UP, SPECIAL_EXPLOSION, REQUEST_REWARDED_AD, RATE_APP
 }
 
 enum class DragDirection {
@@ -341,10 +341,22 @@ class GameViewModel(private val scoreRepository: ScoreRepository) : ViewModel() 
         _uiState.update { it.copy(showSettings = !it.showSettings) }
     }
 
+    fun requestRewardedAd() {
+        viewModelScope.launch {
+            _events.emit(GameEvent.REQUEST_REWARDED_AD)
+        }
+    }
+
+    fun grantRewardMoves(count: Int = 5) {
+        _uiState.update { it.copy(movesLeft = it.movesLeft + count) }
+        checkMovesAvailable()
+    }
+
     fun onRateApp() {
         viewModelScope.launch {
             scoreRepository.setHasRated(true)
             _uiState.update { it.copy(showRateDialog = false) }
+            _events.emit(GameEvent.RATE_APP)
         }
     }
 

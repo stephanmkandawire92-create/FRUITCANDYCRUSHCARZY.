@@ -1,35 +1,32 @@
 package com.fruitcandycrushcarzy.APP.ui.components
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.spring
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.scaleIn
-import androidx.compose.animation.scaleOut
+import androidx.compose.animation.*
+import androidx.compose.animation.core.*
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.foundation.gestures.detectDragGestures
-import androidx.compose.runtime.*
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.foundation.border
 import com.fruitcandycrushcarzy.APP.game.model.Fruit
 import com.fruitcandycrushcarzy.APP.game.model.SpecialType
 import com.fruitcandycrushcarzy.APP.game.viewmodel.DragDirection
 import kotlin.math.abs
+import kotlin.random.Random
 
 @Composable
 fun FruitCell(
@@ -77,7 +74,7 @@ fun FruitCell(
                     onDrag = { _, dragAmount ->
                         if (!swiped) {
                             dragAccumulated += dragAmount
-                            val threshold = 40f // reduced threshold for better responsiveness
+                            val threshold = 40f
                             if (abs(dragAccumulated.x) > threshold || abs(dragAccumulated.y) > threshold) {
                                 swiped = true
                                 if (abs(dragAccumulated.x) > abs(dragAccumulated.y)) {
@@ -94,6 +91,21 @@ fun FruitCell(
             .scale(scale),
         contentAlignment = Alignment.Center
     ) {
+        // Particle Burst Effect on Clear
+        var showParticles by remember { mutableStateOf(false) }
+        
+        LaunchedEffect(fruit) {
+            if (fruit == null) {
+                showParticles = true
+            } else {
+                showParticles = false
+            }
+        }
+
+        if (showParticles) {
+            ParticleBurst(color = Color.White.copy(alpha = 0.7f))
+        }
+
         AnimatedVisibility(
             visible = fruit != null,
             enter = scaleIn(animationSpec = tween(300)),
@@ -108,3 +120,41 @@ fun FruitCell(
         }
     }
 }
+
+@Composable
+fun ParticleBurst(color: Color) {
+    val particles = remember {
+        List(12) {
+            ParticleData(
+                angle = Random.nextFloat() * 360f,
+                speed = Random.nextFloat() * 120f + 60f,
+                size = Random.nextFloat() * 5f + 2f
+            )
+        }
+    }
+
+    val progress = remember { Animatable(0f) }
+    LaunchedEffect(Unit) {
+        progress.animateTo(
+            targetValue = 1f,
+            animationSpec = tween(durationMillis = 600, easing = LinearOutSlowInEasing)
+        )
+    }
+
+    Canvas(modifier = Modifier.fillMaxSize()) {
+        val center = Offset(size.width / 2, size.height / 2)
+        particles.forEach { p ->
+            val dist = p.speed * progress.value
+            val rad = Math.toRadians(p.angle.toDouble())
+            val x = center.x + dist * Math.cos(rad).toFloat()
+            val y = center.y + dist * Math.sin(rad).toFloat()
+            drawCircle(
+                color = color.copy(alpha = (1f - progress.value).coerceAtLeast(0f)),
+                radius = p.size * (1f - progress.value),
+                center = Offset(x, y)
+            )
+        }
+    }
+}
+
+private data class ParticleData(val angle: Float, val speed: Float, val size: Float)

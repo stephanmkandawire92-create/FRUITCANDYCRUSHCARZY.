@@ -11,7 +11,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import android.content.Intent
+import android.net.Uri
 import android.media.MediaPlayer
+import com.google.android.gms.ads.MobileAds
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -21,6 +24,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.fruitcandycrushcarzy.APP.game.data.ScoreRepository
+import com.fruitcandycrushcarzy.APP.game.util.AdManager
 import com.fruitcandycrushcarzy.APP.game.util.SoundManager
 import com.fruitcandycrushcarzy.APP.game.util.VibrationManager
 import com.fruitcandycrushcarzy.APP.game.viewmodel.GameEvent
@@ -31,6 +35,10 @@ import com.fruitcandycrushcarzy.APP.ui.theme.FRUITCANDYCRUSHCARZYTheme
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        
+        // Initialize AdMob
+        MobileAds.initialize(this) {}
+
         enableEdgeToEdge()
         setContent {
             FRUITCANDYCRUSHCARZYTheme {
@@ -48,6 +56,7 @@ class MainActivity : ComponentActivity() {
                 
                 val soundManager = remember { SoundManager(context) }
                 val vibrationManager = remember { VibrationManager(context) }
+                val adManager = remember { AdManager(context) }
                 
                 // Background Music
                 val mediaPlayer = remember {
@@ -84,10 +93,25 @@ class MainActivity : ComponentActivity() {
                             GameEvent.LEVEL_UP -> {
                                 if (uiState.isSoundEnabled) soundManager.playLevelUp()
                                 if (uiState.isVibrationEnabled) vibrationManager.vibrate(200)
+                                // Show Interstitial Ad on Level Up
+                                adManager.showInterstitial(this@MainActivity) {}
                             }
                             GameEvent.SPECIAL_EXPLOSION -> {
                                 if (uiState.isSoundEnabled) soundManager.playExplosion()
                                 if (uiState.isVibrationEnabled) vibrationManager.vibrate(100)
+                            }
+                            GameEvent.REQUEST_REWARDED_AD -> {
+                                adManager.showRewarded(this@MainActivity) {
+                                    viewModel.grantRewardMoves(5)
+                                }
+                            }
+                            GameEvent.RATE_APP -> {
+                                val intent = Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=$packageName"))
+                                try {
+                                    startActivity(intent)
+                                } catch (e: Exception) {
+                                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=$packageName")))
+                                }
                             }
                             else -> {}
                         }
