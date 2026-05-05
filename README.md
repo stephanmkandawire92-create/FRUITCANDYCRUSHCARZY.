@@ -1,5 +1,7 @@
 # FRUIT CANDY CRUSH CARZY
 
+An Android match-3 fruit puzzle game with animated swaps, combo scoring, level progression, sound, haptics, Firebase services, and AdMob support.
+
 FRUIT CANDY CRUSH CARZY is an Android match-3 fruit puzzle game built with Kotlin and Jetpack Compose. The game uses an 8 x 8 board, animated fruit swaps, combo scoring, level progression, sound effects, background music, vibration feedback, saved preferences, Firebase services, and AdMob banner ads.
 
 ## Features
@@ -84,4 +86,4 @@ com.fruitcandycrushcarzy.APP
 
 ## License
 
-No license has been selected yet. Add a license file before distributing the project publicly.
+This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
